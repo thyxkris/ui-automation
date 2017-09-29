@@ -20,9 +20,8 @@ ui-automation is an automation BDD testing framework/solution based on cucumber-
 
         <pre><span style="color: rgb(0,0,128);">public class</span> TestPageModel <span style="color: rgb(0,0,128);">extends</span> BasePageModel {  
         <span style="color: rgb(0,0,128);">public</span> TestPageModel(ScenarioContext scenarioContext) <span style="color: rgb(0,0,128);">throws</span> Exception {  
-        <span style="color: rgb(0,0,128);">String title = "the title of the page model that you are going to create"; //if it's set to null, it's not going to check it, useful for components.</span></pre>
-
-        <pre><span style="color: rgb(0,0,128);">super</span>(scenarioContext, title);  
+        <span style="color: rgb(0,0,128);">String title = "the title of the page model that you are going to create"; //if it's set to null, it's not going to check it, useful for components.</span>
+        <span style="color: rgb(0,0,128);">super</span>(scenarioContext, title);  
             }  
         }</pre>
 

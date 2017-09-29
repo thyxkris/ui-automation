@@ -55,19 +55,7 @@ ui-automation is an automation BDD testing framework/solution based on cucumber-
     4.  it's ready to add business steps into this file.
     5.  tips:
         1. when a common step can be reused via multiple steps, it's advised to put it in to a separate step definition file, such as CommonStepsDef  
-
-                    <pre>  
-                    <span style="color: rgb(0,0,128);">private TestPageStepsDef</span> test<span style="color: rgb(25,72,166);">PageStepsDef</span>; <span style="color: rgb(128,128,128);"></span> <span style="color: rgb(128,128,128);">  
-                    </span><span style="color: rgb(0,0,128);">public</span> CommonStepsDef(ScenarioContext scenarioContext) <span style="color: rgb(0,0,128);">throws</span> Throwable {  
-                    <span style="color: rgb(0,0,128);">super</span>(scenarioContext);  
-                    }  
-
-                    <span style="color: rgb(51,129,255);">@Override  
-                    </span><span style="color: rgb(0,0,128);">public void</span> IShouldBeOnThePage() <span style="color: rgb(0,0,128);">throws</span> Exception {  
-                    //empty, since there is no such a pom  
-                    }</pre>
-
-       2.  for setup/tearUp functions, they should be also put in this common steps def file.
+        2.  for setup/tearUp functions, they should be also put in this common steps def file.
 
 3.  now we can call the functions created in any step definitions in the feature files.
     1.  in intellij ,there is a plugin cucumber can facilitate using cucumber.

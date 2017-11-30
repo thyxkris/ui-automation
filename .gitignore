@@ -1,0 +1,35 @@
+### Intellij ###
+# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm
+
+## Directory-based project format:
+**/.idea/
+# User-specific stuff:
+**/.idea/workspace.xml
+**/.idea/tasks.xml
+**/.idea/dictionaries
+
+# Sensitive or high-churn files:
+**/.idea/atlassian-ide-plugin.xml
+**/.idea/dataSources.ids
+**/.idea/dataSources.xml
+**/.idea/artifacts/
+**/.idea/libraries/
+**/.idea/sqlDataSources.xml
+**/.idea/dynamic.xml
+**/.idea/uiDesigner.xml
+
+## File-based project format:
+*.ipr
+*.iml
+*.iws
+air-service.iml
+
+*.swp
+target/
+
+## Maven Release Plugin temporary files
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties

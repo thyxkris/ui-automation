@@ -105,4 +105,14 @@ public class ConfigHelper {
     }
 
 
+    public static String getDownloadFolder() {
+        if(null == getString("download.folder")|| getString("download.folder").isEmpty())
+        {
+            return getCurrentWorkingDir()+File.separator+"target";
+        }else {
+            return getString("download.folder");
+        }
+    }
+
+
 }

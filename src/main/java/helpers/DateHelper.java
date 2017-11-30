@@ -2,9 +2,7 @@ package helpers;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.*;
 
 
 /**
@@ -48,6 +46,10 @@ public class DateHelper {
     public static Date getDateFromString(String input) throws Exception{
 
         Date date = null;
+        if(null == input)
+        {
+            return null;
+        }
         if (input.toLowerCase().contains("now") || input.toLowerCase().contains("today")) {
             date = new Date();
         } else if (input.toLowerCase().contains("+")) {
@@ -83,7 +85,33 @@ public class DateHelper {
     }
 
     public static String DateFormatConvert(Date date, String newPattern) throws ParseException {
+        if(null == date)
+        {
+            return null;
+        }
         SimpleDateFormat simpleDateNewFormat = new SimpleDateFormat(newPattern);
         return simpleDateNewFormat.format(date);
+    }
+
+    public static String getCharForNumber(int i) {
+        return i >= 0 && i < 27 ? String.valueOf((char) (i + 65)) : null;
+    }
+
+    public static void collectDigits(int num, List<Integer> digits) {
+        if (num / 10 > 0) {
+            collectDigits(num / 10, digits);
+        }
+        digits.add(num % 10);
+    }
+
+    public static String covertNumberToAlphatletter(Integer number) {
+        List<Integer> digits = new ArrayList<Integer>();
+        collectDigits(number, digits);
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < digits.size(); i++) {
+            stringBuilder.append(getCharForNumber(digits.get(i)));
+        }
+
+        return stringBuilder.toString();
     }
 }

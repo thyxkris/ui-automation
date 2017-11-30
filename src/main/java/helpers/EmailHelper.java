@@ -70,7 +70,7 @@ public class EmailHelper {
 
 
             URLName urln = new URLName("pop3", "pop.gmail.com", 995, null,
-                    "fcl.online.automation@gmail.com", "fcL0nlin3");
+                    "fcl.online.automation@gmail.com", "zaq1XSW@");
             Store store = session.getStore(urln);
 
             //create properties field

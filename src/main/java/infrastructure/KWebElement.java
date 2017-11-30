@@ -22,7 +22,34 @@ public class KWebElement implements WebElement {
 
     @Override
     public void click() {
-        this.webElement.click();
+        try {
+            this.webElement.click();
+        } catch (org.openqa.selenium.StaleElementReferenceException e) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
+            this.webElement.click();
+        } catch (org.openqa.selenium.WebDriverException e) {
+            if (e.toString().contains("No buffer space available")) {
+                try {
+                    Thread.sleep(20000);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+                this.webElement.click();
+            } else if (e.toString().contains("no such session")) {
+                try {
+                    Thread.sleep(20000);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+                this.webElement.click();
+            } else {
+                throw e;
+            }
+        }
     }
 
     @Override
@@ -32,12 +59,67 @@ public class KWebElement implements WebElement {
 
     @Override
     public void sendKeys(CharSequence... charSequences) {
-        this.webElement.sendKeys(charSequences);
+
+        try {
+            this.webElement.sendKeys(charSequences);
+        } catch (org.openqa.selenium.StaleElementReferenceException e) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
+            this.webElement.sendKeys(charSequences);
+        } catch (org.openqa.selenium.WebDriverException e) {
+            if (e.toString().contains("No buffer space available")) {
+                try {
+                    Thread.sleep(20000);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+                this.webElement.sendKeys(charSequences);
+            } else if (e.toString().contains("no such session")) {
+                try {
+                    Thread.sleep(20000);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+                this.webElement.sendKeys(charSequences);
+            } else {
+                throw e;
+            }
+        }
     }
 
     @Override
     public void clear() {
-        this.webElement.clear();
+        try {
+            this.webElement.clear();
+        } catch (org.openqa.selenium.StaleElementReferenceException e) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
+            this.webElement.clear();
+        } catch (org.openqa.selenium.WebDriverException e) {
+            if (e.toString().contains("No buffer space available")) {
+                try {
+                    Thread.sleep(20000);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+                this.webElement.clear();
+            } else if (e.toString().contains("no such session")) {
+                try {
+                    Thread.sleep(20000);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+                this.webElement.clear();
+            } else {
+                throw e;
+            }
+        }
     }
 
     @Override
@@ -67,17 +149,99 @@ public class KWebElement implements WebElement {
 
     @Override
     public boolean isSelected() {
-        return this.webElement.isSelected();
+
+        try {
+            return this.webElement.isSelected();
+        } catch (org.openqa.selenium.StaleElementReferenceException e) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
+            return this.webElement.isSelected();
+        } catch (org.openqa.selenium.WebDriverException e) {
+            if (e.toString().contains("No buffer space available")) {
+                try {
+                    Thread.sleep(20000);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+                return this.webElement.isSelected();
+            } else if (e.toString().contains("no such session")) {
+                try {
+                    Thread.sleep(20000);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+                return this.webElement.isSelected();
+            } else {
+                throw e;
+            }
+        }
     }
 
     @Override
     public boolean isEnabled() {
-        return this.webElement.isEnabled();
+        try {
+            return this.webElement.isEnabled();
+        } catch (org.openqa.selenium.StaleElementReferenceException e) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
+            return this.webElement.isEnabled();
+        } catch (org.openqa.selenium.WebDriverException e) {
+            if (e.toString().contains("No buffer space available")) {
+                try {
+                    Thread.sleep(20000);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+                return this.webElement.isEnabled();
+            } else if (e.toString().contains("no such session")) {
+                try {
+                    Thread.sleep(20000);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+                return this.webElement.isEnabled();
+            } else {
+                throw e;
+            }
+        }
     }
 
     @Override
     public String getText() {
-        return this.webElement.getText();
+        try {
+            return this.webElement.getText();
+        } catch (org.openqa.selenium.StaleElementReferenceException e) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
+            return this.webElement.getText();
+        } catch (org.openqa.selenium.WebDriverException e) {
+            if (e.toString().contains("No buffer space available")) {
+                try {
+                    Thread.sleep(20000);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+                return this.webElement.getText();
+            } else if (e.toString().contains("no such session")) {
+                try {
+                    Thread.sleep(20000);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+                return this.webElement.getText();
+            } else {
+                throw e;
+            }
+        }
     }
 
     @Override
@@ -110,8 +274,7 @@ public class KWebElement implements WebElement {
             }
 
             return kWebElements;
-        }catch(org.openqa.selenium.StaleElementReferenceException e)
-        {
+        } catch (org.openqa.selenium.StaleElementReferenceException e) {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e1) {
@@ -143,18 +306,14 @@ public class KWebElement implements WebElement {
 
         try {
             return new KWebElement(this.webElement.findElement(by));
-        }
-        catch(org.openqa.selenium.StaleElementReferenceException e)
-        {
+        } catch (org.openqa.selenium.StaleElementReferenceException e) {
             try {
-                Thread.sleep(1000);
+                Thread.sleep(10000);
             } catch (InterruptedException e1) {
                 e1.printStackTrace();
             }
-           return this.findElement(by);
-        }
-        catch (org.openqa.selenium.WebDriverException e)
-        {
+            return this.findElement(by);
+        } catch (org.openqa.selenium.WebDriverException e) {
             if (e.toString().contains("No buffer space available")) {
                 try {
                     Thread.sleep(20000);
@@ -178,17 +337,100 @@ public class KWebElement implements WebElement {
 
     @Override
     public boolean isDisplayed() {
-        return this.webElement.isDisplayed();
+        try {
+            return this.webElement.isDisplayed();
+        } catch (org.openqa.selenium.StaleElementReferenceException e) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
+            return this.webElement.isDisplayed();
+        } catch (org.openqa.selenium.WebDriverException e) {
+            if (e.toString().contains("No buffer space available")) {
+                try {
+                    Thread.sleep(20000);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+                return this.webElement.isDisplayed();
+            } else if (e.toString().contains("no such session")) {
+                try {
+                    Thread.sleep(20000);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+                return this.webElement.isDisplayed();
+            } else {
+                throw e;
+            }
+        }
     }
 
     @Override
     public Point getLocation() {
-        return this.webElement.getLocation();
+
+        try {
+            return this.webElement.getLocation();
+        } catch (org.openqa.selenium.StaleElementReferenceException e) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
+            return this.webElement.getLocation();
+        } catch (org.openqa.selenium.WebDriverException e) {
+            if (e.toString().contains("No buffer space available")) {
+                try {
+                    Thread.sleep(20000);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+                return this.webElement.getLocation();
+            } else if (e.toString().contains("no such session")) {
+                try {
+                    Thread.sleep(20000);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+                return this.webElement.getLocation();
+            } else {
+                throw e;
+            }
+        }
     }
 
     @Override
     public Dimension getSize() {
-        return this.webElement.getSize();
+
+        try {
+            return this.webElement.getSize();
+        } catch (org.openqa.selenium.StaleElementReferenceException e) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
+            return this.webElement.getSize();
+        } catch (org.openqa.selenium.WebDriverException e) {
+            if (e.toString().contains("No buffer space available")) {
+                try {
+                    Thread.sleep(20000);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+                return this.webElement.getSize();
+            } else if (e.toString().contains("no such session")) {
+                try {
+                    Thread.sleep(20000);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+                return this.webElement.getSize();
+            } else {
+                throw e;
+            }
+        }
     }
 
     @Override

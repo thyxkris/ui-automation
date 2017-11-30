@@ -7,9 +7,9 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 
-import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.Locale;
+import java.util.Set;
 
 /**
  * Created by makri on 29/06/2017.
@@ -22,6 +22,8 @@ public class Base {
     protected String title = "";
     protected Locale locale = null;
 
+
+
     public <T extends KBaseContext> Base(T scenarioContext, String title) {
         setup(scenarioContext, title, null, "en", "AU");
     }
@@ -30,17 +32,21 @@ public class Base {
 
         setup(scenarioContext, title, url, "en", "AU");
     }
-    public String resetTitle(String title)
-    {
+
+    public String resetTitle(String title) {
         this.title = title;
         return this.title;
     }
+
+
+
+
     //foundamental initialization - parameters include scenario context, page title, expected url, expected language and country
     public <T extends KBaseContext> void setup(T scenarioContext, String title, String url, String language, String country) {
         if (logger == null) {
             logger = scenarioContext.getLogger();
         }
-        logger.info(scenarioContext.getScenario().getName()+scenarioContext.getScenario().getSourceTagNames()+scenarioContext.getScenario().getClass());
+        logger.info(scenarioContext.getScenario().getName() + scenarioContext.getScenario().getSourceTagNames() + scenarioContext.getScenario().getClass());
         logger.info(this.getClass() + " start to initialize");
 
         this.driver = scenarioContext.getWebDriver();
@@ -172,7 +178,30 @@ public class Base {
 
         }
         scenarioContext.getScenario().write(this.title + " is loaded");
-        scenarioContext.getScenario().embed(scenarioContext.getWebDriver().getScreenshotAs(OutputType.BYTES),"image/png");
+        scenarioContext.getScenario().embed(scenarioContext.getWebDriver().getScreenshotAs(OutputType.BYTES), "image/png");
+    }
+
+    //it seems it should not be here since it's called pageLoad
+    public void waitForPageLoad(By by) throws Exception {
+        logger.info("logger.info(driver.getTitle());" + by.toString());
+        int retryTimes = helpers.ConfigHelper.getAttemptCount();
+        int millionSecondsToSleepInPageLoad = helpers.ConfigHelper.getPageLoadWaitTime() / retryTimes * 1000;
+        while (driver.findElements(by).size()==0) {
+
+            if (retryTimes > 0) {
+                logger.info("logger.info(driver.getTitle());" + by.toString());
+                --retryTimes;
+                driver.checkPresenceOf(by);
+                Thread.sleep(millionSecondsToSleepInPageLoad);
+
+            } else {
+                logger.info(driver.getTitle());
+                throw new TimeoutException("wait for page Load attemps too many times and still cannot get the expected page, the test is terminated");
+            }
+
+        }
+        scenarioContext.getScenario().write(this.title + " is loaded");
+        scenarioContext.getScenario().embed(scenarioContext.getWebDriver().getScreenshotAs(OutputType.BYTES), "image/png");
     }
 
     public boolean goBack() {
@@ -180,16 +209,22 @@ public class Base {
         return true;
     }
 
-    public String takeScreenShot() {
+    public String takeScreenShot(boolean isTakenOndisk) {
         try {
             final byte[] foto = scenarioContext.getWebDriver().getScreenshotAs(OutputType.BYTES);
             scenarioContext.getScenario().embed(foto, "image/png");
-            driver.takeScreenShot();
-            return  "screenshot taken";//
+            if(isTakenOndisk) {
+                driver.takeScreenShot();
+            }
+            return "screenshot taken";//
         } catch (Exception e) {
             logger.info(e.toString());
             return "fail";
         }
+    }
+
+    public String takeScreenShot() {
+        return takeScreenShot(false);
     }
 
     public String formatCurrency(double amount, String language, String country) {
@@ -201,5 +236,6 @@ public class Base {
         NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(this.locale);
         return currencyFormatter.format(amount);
     }
+
 
 }

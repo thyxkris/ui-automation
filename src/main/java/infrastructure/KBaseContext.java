@@ -4,8 +4,11 @@ import cucumber.api.Scenario;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.naming.Name;
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Set;
 
 /**
  * Created by Kris Ma on 21/05/2017.
@@ -14,6 +17,7 @@ public abstract class KBaseContext extends HashMap<String, Object> {
 
     //private Dictionary hashMap = new Hashtable();
     private HashMap<String, Object> hashMap = new HashMap<String, Object>();
+
 
     @Override
     public int size() {
@@ -117,5 +121,6 @@ public abstract class KBaseContext extends HashMap<String, Object> {
 
         this.kWebDriver = kWebDriver;
     }
+
 
 }

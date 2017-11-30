@@ -4,11 +4,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.thyxkris</groupId>
-    <artifactId>ui-automation</artifactId>
-
+    <groupId>net.flitech</groupId>
+    <artifactId>fcl-ui-automation</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>ui-automation</name>
+    <name>fcl-ui-automation</name>
     <packaging>jar</packaging>
 
 
@@ -21,10 +20,9 @@
         <failsafe.rerunFailingTestsCount>0</failsafe.rerunFailingTestsCount>
         <selenium.grid.url>127.0.0.1</selenium.grid.url>
         <browser.type>chrome</browser.type>
-        <pageload.wait.time>20</pageload.wait.time>
+        <pageload.wait.time>300</pageload.wait.time>
         <element.wait.time>15</element.wait.time>
         <implicit.wait.time>50</implicit.wait.time>
-
         <browserstack.os></browserstack.os>
         <browserstack.os_version></browserstack.os_version>
         <browserstack.browserName></browserstack.browserName>
@@ -38,11 +36,22 @@
         <browserstack.resolution></browserstack.resolution>
         <browserstack.selenium_version></browserstack.selenium_version>
         <browserstack.device></browserstack.device>
+        <browserstack.debug></browserstack.debug>
         <browserstack.realMobile></browserstack.realMobile>
         <browserstack.browserstack.appium_version></browserstack.browserstack.appium_version>
         <browserstack.deviceOrientation></browserstack.deviceOrientation>
         <browserstack.url></browserstack.url>
         <window.resolution></window.resolution>
+        <featuresDirectory></featuresDirectory>
+        <rerunOutputDirectory>target/rerun</rerunOutputDirectory>
+        <chrome.headless>false</chrome.headless>
+        <ignored.airline></ignored.airline>
+        <ParallelOutputDirectory>target/cucumber-parallel/</ParallelOutputDirectory>
+        <rerun.directory></rerun.directory>
+        <first.run.directory>target/cucumber-parallel/</first.run.directory>
+        <htmlReportDir></htmlReportDir>
+        <execution.env></execution.env>
+        <download.folder></download.folder>
 
     </properties>
 
@@ -114,34 +123,12 @@
             <version>3.4.0</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-core</artifactId>
-            <version>${version.jackson}</version>
-        </dependency>
 
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>${version.jackson}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.fasterxml.jackson.jaxrs</groupId>
-            <artifactId>jackson-jaxrs-json-provider</artifactId>
-            <version>${version.jackson}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-jaxrs</artifactId>
-            <version>${version.jackson}</version>
-        </dependency>
 
         <dependency>
             <groupId>com.jayway.jsonpath</groupId>
             <artifactId>json-path</artifactId>
-            <version>2.2.0</version>
+            <version>2.4.0</version>
         </dependency>
 
         <!-- cucumber  junit-->
@@ -204,6 +191,21 @@
             <groupId>net.masterthought</groupId>
             <artifactId>cucumber-reporting</artifactId>
             <version>3.10.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-api</artifactId>
+            <version>3.5.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-api</artifactId>
+            <version>3.5.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-api</artifactId>
+            <version>3.5.3</version>
         </dependency>
 
     </dependencies>
@@ -277,6 +279,7 @@
                 </configuration>
 
             </plugin>
+
 
 
         </plugins>

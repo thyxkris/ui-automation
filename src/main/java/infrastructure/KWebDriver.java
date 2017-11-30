@@ -180,9 +180,9 @@ public class KWebDriver implements JavascriptExecutor, HasInputDevices, WebDrive
 
             return kRemoteWebElements;
             // return driver.findElements(by);
-        } catch (org.openqa.selenium.WebDriverException e) {
+        } catch (Exception e) {
             if (e.toString().contains("No buffer space available")) {
-                logger.info(e.toString());
+                this.getLogger().info(e.toString());
                 try {
                     Thread.sleep(ConfigHelper.getImplicitWaitTime());
                 } catch (InterruptedException e1) {
@@ -494,6 +494,7 @@ public class KWebDriver implements JavascriptExecutor, HasInputDevices, WebDrive
                 webElement.click();
             } catch (Exception e3) {
                 logger.info(e3.toString());
+                throw e3;
             }
 
         } catch (org.openqa.selenium.WebDriverException e1) {
@@ -533,6 +534,7 @@ public class KWebDriver implements JavascriptExecutor, HasInputDevices, WebDrive
                 webElement.click();
             } catch (Exception e3) {
                 logger.info(e3.toString());
+                throw e3;
             }
 
         } catch (org.openqa.selenium.WebDriverException e1) {
@@ -545,6 +547,7 @@ public class KWebDriver implements JavascriptExecutor, HasInputDevices, WebDrive
                 } catch (Exception e2) {
                     logger.info(e2.toString());
                     //   clickButton(webElement);//return to the entry
+                    executeScript("arguments[0].click();", ((KWebElement) webElement.getWebElement()).getWebElement());
                 }
             }
         } catch (Exception e3) {

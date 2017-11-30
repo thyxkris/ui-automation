@@ -22,6 +22,7 @@ import org.openqa.selenium.safari.SafariOptions;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
 
 /**
  * Created by macked on 29/03/2017.
@@ -43,10 +44,12 @@ public class DriversFactory {
     //local standalone mode should be configured as it's local so apparantely it's easier to configure.
     public static WebDriver getDriver(String driverType, String seleniuGridUrl) {
         WebDriver driver = null;
+        //for specify download folder
+        //String downloadFilepath = ConfigHelper.getDownloadFolder();
         switch (driverType) {
             case "browserstack":
-                String USERNAME = "browserstack";
-                String AUTOMATE_KEY = "browserstack";
+                String USERNAME = "otis8";
+                String AUTOMATE_KEY = "5ZpdSfAmCEpyvwrF8BTq";
                 //  final String URL = "http://otis8:5ZpdSfAmCEpyvwrF8BTq@hub.browserstack.com:80/wd/hub";
                 String URL = "http://" + USERNAME + ":" + AUTOMATE_KEY + "@hub.browserstack.com:80/wd/hub";
                 if (!ConfigHelper.getString("browserstack.url").isEmpty()) {
@@ -54,10 +57,15 @@ public class DriversFactory {
                     logger.info(URL);
                 }
 
+                //browserstack.debug=true
                 DesiredCapabilities caps = new DesiredCapabilities();
                 if (!ConfigHelper.getString("browserstack.os").isEmpty()) {
                     caps.setCapability("os", ConfigHelper.getString("browserstack.os"));
                     logger.info("browserstack.os"+ConfigHelper.getString("browserstack.os"));
+                }
+                if (!ConfigHelper.getString("browserstack.debug").isEmpty()) {
+                    caps.setCapability("browserstack.debug", ConfigHelper.getString("browserstack.debug"));
+                    logger.info("browserstack.debug"+ConfigHelper.getString("browserstack.debug"));
                 }
                 if (!ConfigHelper.getString("browserstack.os_version").isEmpty()) {
                     caps.setCapability("os_version", ConfigHelper.getString("browserstack.os_version"));
@@ -131,26 +139,42 @@ public class DriversFactory {
                 }
                 break;
             case "chrome":
+                //final  ChromeOptions chromeOptions = new ChromeOptions();
+                HashMap<String, Object> chromePrefs = new HashMap<String, Object>();
+                chromePrefs.put("profile.default_content_settings.popups", 0);
+                chromePrefs.put("download.prompt_for_download", "false");
+                chromePrefs.put("download.directory_upgrade", "true");
+                chromePrefs.put("plugins.always_open_pdf_externally", "true");
+                chromePrefs.put("download.default_directory", ConfigHelper.getDownloadFolder());
+                chromePrefs.put("plugins.plugins_disabled", new String[] {
+                        "Adobe Flash Player",
+                        "Chrome PDF Viewer"
+                });
+                chromePrefs.put("pdfjs.disabled", true);
+                ChromeOptions chromeOptions = new ChromeOptions();
+                chromeOptions.setExperimentalOption("prefs", chromePrefs);
+                chromeOptions.addArguments("start-maximized");
+                chromeOptions.addArguments("disable-infobars");
+                chromeOptions.addArguments("--test-type");
+                DesiredCapabilities cap = DesiredCapabilities.chrome();
+                cap.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
+                cap.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
 
-                final  ChromeOptions chromeOptions = new ChromeOptions();
                 if (ConfigHelper.getString("chrome.headless").toLowerCase().contains("t")||ConfigHelper.getString("chrome.headless").toLowerCase().contains("y")) {
                     chromeOptions.addArguments("--headless");
                     logger.info("chrome headless mode adopted");
                 }
 
-                if ((null == seleniuGridUrl) || (seleniuGridUrl.equals(""))) {
+                if ((null == seleniuGridUrl) || (seleniuGridUrl.equals("")|| seleniuGridUrl.equals("127.0.0.1"))) {
 
+                    driver = new ChromeDriver(cap);
 
-                    driver = new ChromeDriver(chromeOptions);
                     logger.info(driverType + " driver is generated locally");
                 } else {
                     try {
-                        DesiredCapabilities capability = DesiredCapabilities.chrome();
 
-                        capability.setCapability(CapabilityType.UNEXPECTED_ALERT_BEHAVIOUR, UnexpectedAlertBehaviour.IGNORE);
-                        capability.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
-                        driver = new RemoteWebDriver(new URL(ConfigHelper.getString("selenium.grid.url")), capability);
-                        logger.info("remoteWebdriver is " + driverType + " driver, pointing " + seleniuGridUrl, capability + " is generated");
+                        driver = new RemoteWebDriver(new URL(ConfigHelper.getString("selenium.grid.url")), cap);
+                        logger.info("remoteWebdriver is " + driverType + " driver, pointing " + seleniuGridUrl, cap + " is generated");
                     } catch (MalformedURLException malformedURLException) {
                         logger.info(malformedURLException.toString());
                         return null;

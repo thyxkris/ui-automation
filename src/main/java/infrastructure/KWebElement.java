@@ -24,13 +24,6 @@ public class KWebElement implements WebElement {
     public void click() {
         try {
             this.webElement.click();
-        } catch (org.openqa.selenium.StaleElementReferenceException e) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e1) {
-                e1.printStackTrace();
-            }
-            this.webElement.click();
         } catch (org.openqa.selenium.WebDriverException e) {
             if (e.toString().contains("No buffer space available")) {
                 try {
@@ -62,13 +55,6 @@ public class KWebElement implements WebElement {
 
         try {
             this.webElement.sendKeys(charSequences);
-        } catch (org.openqa.selenium.StaleElementReferenceException e) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e1) {
-                e1.printStackTrace();
-            }
-            this.webElement.sendKeys(charSequences);
         } catch (org.openqa.selenium.WebDriverException e) {
             if (e.toString().contains("No buffer space available")) {
                 try {
@@ -93,13 +79,6 @@ public class KWebElement implements WebElement {
     @Override
     public void clear() {
         try {
-            this.webElement.clear();
-        } catch (org.openqa.selenium.StaleElementReferenceException e) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e1) {
-                e1.printStackTrace();
-            }
             this.webElement.clear();
         } catch (org.openqa.selenium.WebDriverException e) {
             if (e.toString().contains("No buffer space available")) {
@@ -216,13 +195,6 @@ public class KWebElement implements WebElement {
     public String getText() {
         try {
             return this.webElement.getText();
-        } catch (org.openqa.selenium.StaleElementReferenceException e) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e1) {
-                e1.printStackTrace();
-            }
-            return this.webElement.getText();
         } catch (org.openqa.selenium.WebDriverException e) {
             if (e.toString().contains("No buffer space available")) {
                 try {
@@ -247,6 +219,11 @@ public class KWebElement implements WebElement {
     @Override
     public List<WebElement> findElements(By by) {
         try {
+            this.webElement.isEnabled();
+        } catch (org.openqa.selenium.StaleElementReferenceException staleElementReferenceException) {
+            throw new IllegalArgumentException(this.webElement.toString() + " is staleElement");
+        }
+        try {
             return this.webElement.findElements(by);
         } catch (org.openqa.selenium.WebDriverException e)
 
@@ -266,6 +243,13 @@ public class KWebElement implements WebElement {
 
 
     public List<KWebElement> findKElements(By by) {
+
+        try {
+            this.webElement.isEnabled();
+        } catch (org.openqa.selenium.StaleElementReferenceException staleElementReferenceException) {
+            throw new IllegalArgumentException(this.webElement.toString() + " is staleElement");
+        }
+
         try {
             List<WebElement> webElements = this.webElement.findElements(by);
             List<KWebElement> kWebElements = new ArrayList<KWebElement>();
@@ -301,9 +285,11 @@ public class KWebElement implements WebElement {
 
     @Override
     public KWebElement findElement(By by) {
-        //  this.webElement = this.webElement.findElement(by);
-        //   return new KWebElement(this.webElement.findElement(by));
-
+        try {
+            this.webElement.isEnabled();
+        } catch (org.openqa.selenium.StaleElementReferenceException staleElementReferenceException) {
+            throw new IllegalArgumentException(this.webElement.toString() + " is staleElement");
+        }
         try {
             return new KWebElement(this.webElement.findElement(by));
         } catch (org.openqa.selenium.StaleElementReferenceException e) {
@@ -339,14 +325,8 @@ public class KWebElement implements WebElement {
     public boolean isDisplayed() {
         try {
             return this.webElement.isDisplayed();
-        } catch (org.openqa.selenium.StaleElementReferenceException e) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e1) {
-                e1.printStackTrace();
-            }
-            return this.webElement.isDisplayed();
-        } catch (org.openqa.selenium.WebDriverException e) {
+        }
+        catch (org.openqa.selenium.WebDriverException e) {
             if (e.toString().contains("No buffer space available")) {
                 try {
                     Thread.sleep(20000);
@@ -371,13 +351,6 @@ public class KWebElement implements WebElement {
     public Point getLocation() {
 
         try {
-            return this.webElement.getLocation();
-        } catch (org.openqa.selenium.StaleElementReferenceException e) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e1) {
-                e1.printStackTrace();
-            }
             return this.webElement.getLocation();
         } catch (org.openqa.selenium.WebDriverException e) {
             if (e.toString().contains("No buffer space available")) {
@@ -404,13 +377,6 @@ public class KWebElement implements WebElement {
     public Dimension getSize() {
 
         try {
-            return this.webElement.getSize();
-        } catch (org.openqa.selenium.StaleElementReferenceException e) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e1) {
-                e1.printStackTrace();
-            }
             return this.webElement.getSize();
         } catch (org.openqa.selenium.WebDriverException e) {
             if (e.toString().contains("No buffer space available")) {

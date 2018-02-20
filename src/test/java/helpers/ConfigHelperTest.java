@@ -40,27 +40,27 @@ public class ConfigHelperTest {
 
     @Test
     public void getTestResourcesFolderPath() throws Exception {
-        Assert.assertEquals("C:\\source\\fcl-ui-automation\\target\\test-classes", ConfigHelper.getTestResourcesFolderPath());
+        Assert.assertEquals("C:\\source\\ui-automation\\target\\test-classes", ConfigHelper.getTestResourcesFolderPath());
     }
 
     @Test
     public void getCurrentWorkingDir() throws Exception {
-        Assert.assertEquals("C:\\source\\fcl-ui-automation", ConfigHelper.getCurrentWorkingDir());
+        Assert.assertEquals("C:\\source\\ui-automation", ConfigHelper.getCurrentWorkingDir());
     }
 
     @Test
     public void getUserDir() throws Exception {
-        Assert.assertEquals("C:\\source\\fcl-ui-automation", ConfigHelper.getUserDir());
+        Assert.assertEquals("C:\\source\\ui-automation", ConfigHelper.getUserDir());
     }
 
     @Test
     public void getTemplateDir() throws Exception {
-        Assert.assertEquals("C:\\source\\fcl-ui-automation\\target\\test-classes\\templates\\", ConfigHelper.getTemplateDir());
+        Assert.assertEquals("C:\\source\\ui-automation\\target\\test-classes\\templates\\", ConfigHelper.getTemplateDir());
     }
 
     @Test
     public void getProjectBaseDir() throws Exception {
-        Assert.assertEquals("C:/source/fcl-ui-automation", ConfigHelper.getProjectBaseDir());
+        Assert.assertEquals("C:/source/ui-automation", ConfigHelper.getProjectBaseDir());
     }
 
     @Test

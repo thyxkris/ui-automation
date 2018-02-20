@@ -131,7 +131,17 @@ public class KWebDriver implements JavascriptExecutor, HasInputDevices, WebDrive
     public String getTitle() {
         try {
             return driver.getTitle();
-        } catch (org.openqa.selenium.WebDriverException e) {
+        } catch (UnhandledAlertException f) {
+            try {
+                Alert alert = driver.switchTo().alert();
+                String alertText = alert.getText();
+                logger.info("Alert data: " + alertText);
+                alert.accept();
+                return getTitle();
+            } catch (NoAlertPresentException e) {
+                return getTitle();
+            }
+        }catch (org.openqa.selenium.WebDriverException e) {
             if (e.toString().contains("No buffer space available")) {
                 logger.info(e.toString());
                 try {
@@ -450,7 +460,17 @@ public class KWebDriver implements JavascriptExecutor, HasInputDevices, WebDrive
             scrollViewToWebElement(locator);
             findElement(locator).click();
 
-        } catch (org.openqa.selenium.StaleElementReferenceException e) {
+        } catch (UnhandledAlertException f) {
+            try {
+                Alert alert = driver.switchTo().alert();
+                String alertText = alert.getText();
+                logger.info("Alert data: " + alertText);
+                alert.accept();
+                clickButton(locator);
+            } catch (NoAlertPresentException e) {
+                clickButton(locator);
+            }
+        }catch (org.openqa.selenium.StaleElementReferenceException e) {
             try {
                 getLogger().info(e.toString());
                 WebDriverWait wait = new WebDriverWait(driver, TestConstantData.elementWaitTime);
@@ -485,7 +505,17 @@ public class KWebDriver implements JavascriptExecutor, HasInputDevices, WebDrive
             fluentWait.until(ExpectedConditions.elementToBeClickable(webElement));
             scrollViewToWebElement(webElement);
             webElement.click();
-        } catch (org.openqa.selenium.StaleElementReferenceException e) {
+        } catch (UnhandledAlertException f) {
+            try {
+                Alert alert = driver.switchTo().alert();
+                String alertText = alert.getText();
+                System.out.println("Alert data: " + alertText);
+                alert.accept();
+                clickButton(webElement);
+            } catch (NoAlertPresentException e) {
+                clickButton(webElement);
+            }
+        }catch (org.openqa.selenium.StaleElementReferenceException e) {
 
             getLogger().info(e.toString());
             getLogger().info(webElement.toString());

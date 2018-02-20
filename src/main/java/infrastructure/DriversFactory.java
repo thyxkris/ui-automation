@@ -157,6 +157,7 @@ public class DriversFactory {
                 chromeOptions.addArguments("disable-infobars");
                 chromeOptions.addArguments("--test-type");
                 DesiredCapabilities cap = DesiredCapabilities.chrome();
+                cap.setCapability(CapabilityType.UNEXPECTED_ALERT_BEHAVIOUR, UnexpectedAlertBehaviour.IGNORE);
                 cap.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
                 cap.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
 

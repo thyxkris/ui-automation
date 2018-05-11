@@ -14,6 +14,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -141,7 +143,7 @@ public class KWebDriver implements JavascriptExecutor, HasInputDevices, WebDrive
             } catch (NoAlertPresentException e) {
                 return getTitle();
             }
-        }catch (org.openqa.selenium.WebDriverException e) {
+        } catch (org.openqa.selenium.WebDriverException e) {
             if (e.toString().contains("No buffer space available")) {
                 logger.info(e.toString());
                 try {
@@ -470,7 +472,7 @@ public class KWebDriver implements JavascriptExecutor, HasInputDevices, WebDrive
             } catch (NoAlertPresentException e) {
                 clickButton(locator);
             }
-        }catch (org.openqa.selenium.StaleElementReferenceException e) {
+        } catch (org.openqa.selenium.StaleElementReferenceException e) {
             try {
                 getLogger().info(e.toString());
                 WebDriverWait wait = new WebDriverWait(driver, TestConstantData.elementWaitTime);
@@ -515,7 +517,7 @@ public class KWebDriver implements JavascriptExecutor, HasInputDevices, WebDrive
             } catch (NoAlertPresentException e) {
                 clickButton(webElement);
             }
-        }catch (org.openqa.selenium.StaleElementReferenceException e) {
+        } catch (org.openqa.selenium.StaleElementReferenceException e) {
 
             getLogger().info(e.toString());
             getLogger().info(webElement.toString());
@@ -547,7 +549,7 @@ public class KWebDriver implements JavascriptExecutor, HasInputDevices, WebDrive
         }
     }
 
-    public void clickButton(KWebElement webElement) throws InterruptedException {
+    public void clickButton(KWebElement webElement) {
 
         try {
             FluentWait fluentWait = new FluentWait(driver).withTimeout(ConfigHelper.getAttemptCount() * ConfigHelper.getElementWaitTime(), SECONDS).pollingEvery(50, MILLISECONDS);
@@ -557,15 +559,9 @@ public class KWebDriver implements JavascriptExecutor, HasInputDevices, WebDrive
             webElement.click();
         } catch (org.openqa.selenium.StaleElementReferenceException e) {
 
-            getLogger().info(e.toString());
+            getLogger().info(e.getLocalizedMessage() + ' ' + e.getStackTrace());
             getLogger().info(webElement.toString());
-            //it means it's been clicked
-            try {
-                webElement.click();
-            } catch (Exception e3) {
-                logger.info(e3.toString());
-                throw e3;
-            }
+            throw e;
 
         } catch (org.openqa.selenium.WebDriverException e1) {
             if (e1.toString().contains("Other element would receive the click")) {
@@ -594,6 +590,16 @@ public class KWebDriver implements JavascriptExecutor, HasInputDevices, WebDrive
         return webElementExtension.takeScreenShot(prefixName);
     }
 
+    public String takeScreenShot(BufferedImage bufferedImage, String extraInfo) throws IOException {
+
+        try {
+            return webElementExtension.takeScreenShot(bufferedImage,extraInfo);
+        } catch (Exception e) {
+            logger.info(e.getMessage());
+            throw e;
+        }
+    }
+
     public String takeScreenShot() throws IOException {
 
         return webElementExtension.takeScreenShot();
@@ -614,6 +620,7 @@ public class KWebDriver implements JavascriptExecutor, HasInputDevices, WebDrive
             }
             throw e;
         }
+
     }
 
 

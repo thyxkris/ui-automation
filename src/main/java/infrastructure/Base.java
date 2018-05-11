@@ -2,11 +2,13 @@ package infrastructure;
 
 
 import org.apache.logging.log4j.Logger;
-import org.openqa.selenium.By;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
+import org.openqa.selenium.Point;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.Set;
@@ -23,7 +25,6 @@ public class Base {
     protected Locale locale = null;
 
 
-
     public <T extends KBaseContext> Base(T scenarioContext, String title) {
         setup(scenarioContext, title, null, "en", "AU");
     }
@@ -37,8 +38,6 @@ public class Base {
         this.title = title;
         return this.title;
     }
-
-
 
 
     //foundamental initialization - parameters include scenario context, page title, expected url, expected language and country
@@ -66,7 +65,6 @@ public class Base {
         logger.info(this.getClass() + " finish to initialize");
 
     }
-
 
 
     public void clickButtonAndContinue(By by, Integer attemptCursor, Integer attemptCount, By[] pops) throws Exception {
@@ -186,7 +184,7 @@ public class Base {
         logger.info("logger.info(driver.getTitle());" + by.toString());
         int retryTimes = helpers.ConfigHelper.getAttemptCount();
         int millionSecondsToSleepInPageLoad = helpers.ConfigHelper.getPageLoadWaitTime() / retryTimes * 1000;
-        while (driver.findElements(by).size()==0) {
+        while (driver.findElements(by).size() == 0) {
 
             if (retryTimes > 0) {
                 logger.info("logger.info(driver.getTitle());" + by.toString());
@@ -209,11 +207,75 @@ public class Base {
         return true;
     }
 
+    public static BufferedImage resize(BufferedImage img, int newW, int newH) {
+        int w = img.getWidth();
+        int h = img.getHeight();
+        BufferedImage dimg = dimg = new BufferedImage(newW, newH, img.getType());
+        Graphics2D g = dimg.createGraphics();
+        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g.drawImage(img, 0, 0, newW, newH, 0, 0, w, h, null);
+        g.dispose();
+        return dimg;
+    }
+
+    public String takeScreenShot(boolean isTakenOndisk, boolean inEmbeded, KWebElement webElement, int deviationX, int deviationY, double percentageOfReduction, String extraInfo) {
+        try {
+
+            BufferedImage img = ImageIO.read(scenarioContext.getWebDriver().getScreenshotAs(OutputType.FILE));
+            BufferedImage dest = null;
+            BufferedImage biCompressed = null;
+
+            if (webElement != null) {
+                Point p = webElement.getLocation();
+                scenarioContext.getScenario().write("x= " + p.getX() + " y= " + p.getY());
+
+                int width = webElement.getSize().getWidth();
+                int height = webElement.getSize().getHeight();
+                scenarioContext.getScenario().write("width= " + width + " height= " + height);
+
+
+                dest = img.getSubimage(p.getX(), p.getY(), deviationX + width, deviationY + height);
+                biCompressed = resize(dest, (int) (percentageOfReduction * (deviationX + width)), (int) (percentageOfReduction * (deviationY + height)));
+                dest.flush();
+            } else {
+                //take the full window
+                biCompressed = resize(img, (int) (percentageOfReduction * driver.manage().window().getSize().getWidth()), (int) (percentageOfReduction * driver.manage().window().getSize().getHeight()));
+            }
+
+
+            if (inEmbeded) {
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                ImageIO.write(biCompressed, "png", baos);
+                scenarioContext.getScenario().embed(baos.toByteArray(), "image/png");
+                baos.flush();
+                baos = null;
+            }
+            if (isTakenOndisk) {
+                driver.takeScreenShot(biCompressed, extraInfo);
+            }
+
+            img.flush();
+            biCompressed.flush();
+            img = null;
+            biCompressed = null;
+
+
+            return "screenshot not taken on purpos";//
+        } catch (Exception e) {
+            logger.info(e.getMessage() + ' ' + e.getStackTrace());
+            return "cannot save screenshot";
+        } catch (java.lang.OutOfMemoryError error) {
+            logger.info(error.getMessage() + ' ' + error.getStackTrace());
+            return "Memory leak due to the bug in webdriver, no more screenshots";
+        }
+    }
+
+
     public String takeScreenShot(boolean isTakenOndisk) {
         try {
             final byte[] foto = scenarioContext.getWebDriver().getScreenshotAs(OutputType.BYTES);
-            scenarioContext.getScenario().embed(foto, "image/png");
-            if(isTakenOndisk) {
+            scenarioContext.getScenario().embed(foto, "image/jpg");
+            if (isTakenOndisk) {
                 driver.takeScreenShot();
             }
             return "screenshot taken";//

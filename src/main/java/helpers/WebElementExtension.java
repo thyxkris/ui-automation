@@ -7,6 +7,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -105,14 +107,58 @@ public class WebElementExtension {
         return ScreenshotPath;
     }
 
+    public String takeScreenShot(String path, BufferedImage bufferedImage) throws IOException {
+
+        File scrFile = new File(path);
+
+        ImageIO.write(bufferedImage, "png", scrFile);
+
+        bufferedImage.flush();
+
+        return path;
+    }
+
     public String takeScreenShot() throws IOException {
 
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
         Date date = new Date();
-        String ScreenshotPath = dateFormat.format(date) + ".png";
+
+        File directory = new File(ConfigHelper.getCurrentWorkingDir() + File.separator + "imgs");
+        if (!directory.exists()) {
+            directory.mkdir();
+            // If you require it to make the entire directory path including parents,
+            // use directory.mkdirs(); here instead.
+        }
+
+        String ScreenshotPath = directory.getAbsolutePath() + File.separator +
+                Thread.currentThread() + '-' + dateFormat.format(date) + ".jpg";
 
 
         return takeScreenShot(ScreenshotPath);
+
+    }
+
+    public String takeScreenShot(BufferedImage bufferedImage, String extraInfo) throws IOException {
+
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+        Date date = new Date();
+
+        File directory = new File(ConfigHelper.getCurrentWorkingDir() + File.separator + "imgs");
+        if (!directory.exists()) {
+            directory.mkdir();
+            // If you require it to make the entire directory path including parents,
+            // use directory.mkdirs(); here instead.
+        }
+        String ScreenshotPath = "";
+        if (null == extraInfo || extraInfo.isEmpty()) {
+            ScreenshotPath = directory.getAbsolutePath() + File.separator + Thread.currentThread() + "-" + dateFormat.format(date) + ".jpg";
+        } else {
+            ScreenshotPath = directory.getAbsolutePath() + File.separator + Thread.currentThread() + "-" + extraInfo + "-" + dateFormat.format(date) + ".jpg";
+        }
+
+
+        return takeScreenShot(ScreenshotPath, bufferedImage);
 
     }
 
@@ -137,10 +183,9 @@ public class WebElementExtension {
 
     public void scrollViewToWebElement(WebElement webElement) {
 
-        if(webElement.getClass().equals(KWebElement.class))
-        {
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", ((KWebElement)webElement).getWebElement());
-        }else {
+        if (webElement.getClass().equals(KWebElement.class)) {
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", ((KWebElement) webElement).getWebElement());
+        } else {
 
             ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", webElement);
         }

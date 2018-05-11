@@ -141,6 +141,7 @@ public class DriversFactory {
             case "chrome":
                 //final  ChromeOptions chromeOptions = new ChromeOptions();
                 HashMap<String, Object> chromePrefs = new HashMap<String, Object>();
+                chromePrefs.put("profile.default_content_setting_values.geolocation", 1);
                 chromePrefs.put("profile.default_content_settings.popups", 0);
                 chromePrefs.put("download.prompt_for_download", "false");
                 chromePrefs.put("download.directory_upgrade", "true");
@@ -152,19 +153,24 @@ public class DriversFactory {
                 });
                 chromePrefs.put("pdfjs.disabled", true);
                 ChromeOptions chromeOptions = new ChromeOptions();
+                if (ConfigHelper.getString("chrome.headless").toLowerCase().contains("t")||ConfigHelper.getString("chrome.headless").toLowerCase().contains("y")) {
+                    chromePrefs.put("profile.default_content_setting_values.geolocation", 1);
+                    chromeOptions.addArguments("--headless");
+                   // chromeOptions.addArguments("--user-data-dir=C:\\Users\\Admin\\AppData\\Local\\Google\\Chrome\\User Data");
+                    //C:\Users\Admin\AppData\Local\Google\Chrome\User Data
+                    logger.info("chrome headless mode adopted");
+                }
                 chromeOptions.setExperimentalOption("prefs", chromePrefs);
                 chromeOptions.addArguments("start-maximized");
                 chromeOptions.addArguments("disable-infobars");
                 chromeOptions.addArguments("--test-type");
+
                 DesiredCapabilities cap = DesiredCapabilities.chrome();
                 cap.setCapability(CapabilityType.UNEXPECTED_ALERT_BEHAVIOUR, UnexpectedAlertBehaviour.IGNORE);
                 cap.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
                 cap.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
 
-                if (ConfigHelper.getString("chrome.headless").toLowerCase().contains("t")||ConfigHelper.getString("chrome.headless").toLowerCase().contains("y")) {
-                    chromeOptions.addArguments("--headless");
-                    logger.info("chrome headless mode adopted");
-                }
+
 
                 if ((null == seleniuGridUrl) || (seleniuGridUrl.equals("")|| seleniuGridUrl.equals("127.0.0.1"))) {
 

@@ -112,27 +112,7 @@ public abstract class BaseStepsDef {
         throw new IllegalArgumentException("no scenario id defined !");
     }
 
-    public org.openqa.selenium.Dimension setResolution() {
 
-        org.openqa.selenium.Dimension resolution = null;
-        try {
-            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-            resolution = new org.openqa.selenium.Dimension((int) screenSize.getWidth(), (int) screenSize.getHeight());
-            logger.info("resolution is set W: " + (int) screenSize.getWidth() + " H: " + (int) screenSize.getHeight());
-        } catch (HeadlessException e) {
-            logger.info(e.toString());
-            try {
-                String[] res = ConfigHelper.getString("window.resolution").toLowerCase().split("x");
-                logger.info("resolution is set W: " + Integer.valueOf(res[0]) + " H: " + Integer.valueOf(res[1]));
-                resolution = new org.openqa.selenium.Dimension(Integer.valueOf(res[0]), Integer.valueOf(res[1]));
-            } catch (Exception e1) {
-
-                logger.info(e1.toString());
-                resolution = new org.openqa.selenium.Dimension(1024, 768);
-            }
-        }
-        return resolution;
-    }
 
     public void outputConfigInfo() {
 
@@ -156,7 +136,6 @@ public abstract class BaseStepsDef {
     public void launchSearchPage(String url) {
 
     }
-
 
 
     public void tearUp() throws IOException {

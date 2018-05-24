@@ -260,7 +260,7 @@ public class Base {
             biCompressed = null;
 
 
-            return "screenshot not taken on purpos";//
+            return "screenshot taken";//
         } catch (Exception e) {
             logger.info(e.getMessage() + ' ' + e.getStackTrace());
             return "cannot save screenshot";
@@ -272,17 +272,7 @@ public class Base {
 
 
     public String takeScreenShot(boolean isTakenOndisk) {
-        try {
-            final byte[] foto = scenarioContext.getWebDriver().getScreenshotAs(OutputType.BYTES);
-            scenarioContext.getScenario().embed(foto, "image/jpg");
-            if (isTakenOndisk) {
-                driver.takeScreenShot();
-            }
-            return "screenshot taken";//
-        } catch (Exception e) {
-            logger.info(e.toString());
-            return "fail";
-        }
+        return takeScreenShot(isTakenOndisk, true, null, 0, 0, 1, null);
     }
 
     public String takeScreenShot() {
@@ -297,6 +287,16 @@ public class Base {
     public String formatCurrency(double amount) {
         NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(this.locale);
         return currencyFormatter.format(amount);
+    }
+
+    public void sleep(int timeInMillionSeconds) {
+        try {
+            Thread.sleep(timeInMillionSeconds);
+        } catch (InterruptedException e) {
+            // Restore the interrupted status
+            logger.info(e.getMessage()+' '+ e.getStackTrace());
+            Thread.currentThread().interrupt();
+        }
     }
 
 

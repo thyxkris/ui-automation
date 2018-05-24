@@ -52,6 +52,10 @@ public class KWebDriver implements JavascriptExecutor, HasInputDevices, WebDrive
         return this.logger = logger;
     }
 
+    public WebDriver getDriver() {
+        return this.driver;
+    }
+
     public Logger getLogger() {
         if (logger == null) {
             return LogManager.getLogger();
@@ -593,7 +597,7 @@ public class KWebDriver implements JavascriptExecutor, HasInputDevices, WebDrive
     public String takeScreenShot(BufferedImage bufferedImage, String extraInfo) throws IOException {
 
         try {
-            return webElementExtension.takeScreenShot(bufferedImage,extraInfo);
+            return webElementExtension.takeScreenShot(bufferedImage, extraInfo);
         } catch (Exception e) {
             logger.info(e.getMessage());
             throw e;

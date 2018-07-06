@@ -156,6 +156,8 @@ public class DriversFactory {
                 chromeOptions.addArguments("start-maximized");
                 chromeOptions.addArguments("disable-infobars");
                 chromeOptions.addArguments("--test-type");
+                chromeOptions.addArguments("--no-sandbox");
+                chromeOptions.addArguments("--disable-dev-shm-usage");
                 DesiredCapabilities cap = DesiredCapabilities.chrome();
                 cap.setCapability(CapabilityType.UNEXPECTED_ALERT_BEHAVIOUR, UnexpectedAlertBehaviour.IGNORE);
                 cap.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);

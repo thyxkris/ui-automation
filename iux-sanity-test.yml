@@ -1,77 +1,53 @@
 steps:
   - command: "if [ $(docker container ls | grep thyx| wc -l) -gt 0 ];then    docker rm -f thyx;fi;docker container ls"
-    env:
-      pwd: "/var/lib/buildkite-agent/builds/buildkite-i-0ff01291468698ab0-1/whispir/iux-sanity-test"
 
   - wait
 
   - command: "hostname&&pwd&&PWD=pwd"
     env:
-      pwd: "/var/lib/buildkite-agent/builds/buildkite-i-0ff01291468698ab0-1/whispir/iux-sanity-test"
+      PWD: "pwd"
 
   - command: "ls"
-    env:
-      pwd: "/var/lib/buildkite-agent/builds/buildkite-i-0ff01291468698ab0-1/whispir/iux-sanity-test"
 
   - wait
 
   - command: "docker pull thyxkris/maven_chrome"
     label: "run docker"
-    env:
-      pwd: "/var/lib/buildkite-agent/builds/buildkite-i-0ff01291468698ab0-1/whispir/iux-sanity-test"
 
   - wait
 
   - command: "docker image ls"
-    env:
-      pwd: "/var/lib/buildkite-agent/builds/buildkite-i-0ff01291468698ab0-1/whispir/iux-sanity-test"
 
   - wait
 
   - command: "docker run --name=thyx -i -t -d -v $PWD:/mnt/ -p 5000:80 thyxkris/maven_chrome bash"
-    env:
-      pwd: "/var/lib/buildkite-agent/builds/buildkite-i-0ff01291468698ab0-1/whispir/iux-sanity-test"
 
   - wait
 
   - command: "docker ps"
-    env:
-      pwd: "/var/lib/buildkite-agent/builds/buildkite-i-0ff01291468698ab0-1/whispir/iux-sanity-test"
 
   - wait
 
   - command: "hostname&&ls&&cd /mnt"
-    env:
-      pwd: "/var/lib/buildkite-agent/builds/buildkite-i-0ff01291468698ab0-1/whispir/iux-sanity-test"
 
   - wait
 
   - command: "docker exec -it thyx ls /mnt/"
-    env:
-      pwd: "/var/lib/buildkite-agent/builds/buildkite-i-0ff01291468698ab0-1/whispir/iux-sanity-test"
 
   - wait
 
-  - command: "hostname&&docker exec -it thyx /bin/bash -c \"cd /mnt/&&cp /usr/bin/chromedriver  /usr/local/bin/&& chmod +x /usr/local/bin/chromedriver&&/usr/share/maven/bin/mvn clean install\""
-    env:
-      pwd: "/var/lib/buildkite-agent/builds/buildkite-i-0ff01291468698ab0-1/whispir/iux-sanity-test"
+  - command: "hostname&&docker exec -it thyx /bin/bash -c \"cd /mnt/&&/usr/share/maven/bin/mvn clean install\""
 
   - wait
 
   - command: "rm -rf ./demo_buythisspace&&git clone https://github.com/thyxkris/demo_buythisspace.git"
-    env:
-      pwd: "/var/lib/buildkite-agent/builds/buildkite-i-0ff01291468698ab0-1/whispir/iux-sanity-test"
 
   - wait
 
   - command: "hostname&&docker exec -it thyx /bin/bash -c \"cd /mnt/demo_buythisspace&&/usr/share/maven/bin/mvn clean test -Dchrome.headless=true&&/usr/share/maven/bin/mvn -Dtest=report test\""
-    env:
-      pwd: "/var/lib/buildkite-agent/builds/buildkite-i-0ff01291468698ab0-1/whispir/iux-sanity-test"
     artifact_paths: "./demo_buythisspace/**/*"
 
   - wait
 
   - command: "tar -cvf demo.tar ./demo_buythisspace/target/cucumber-parallel"
-    env:
-      pwd: "/var/lib/buildkite-agent/builds/buildkite-i-0ff01291468698ab0-1/whispir/iux-sanity-test"
     artifact_paths: "./demo.tar"

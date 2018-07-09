@@ -36,7 +36,7 @@ steps:
 
   - wait
 
-  - command: "hostname&&docker exec -it thyx /bin/bash -c \"cd /mnt/&&/usr/share/maven/bin/mvn clean install\""
+  - command: "hostname&&docker exec -it thyx /bin/bash -c \"cd /mnt/&&pwd&&ls -l&&/usr/share/maven/bin/mvn clean install\""
 
   - wait
 
